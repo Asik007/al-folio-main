@@ -1,0 +1,10 @@
+name: "Alex Martinez"
+credentials: "Undergraduate Research Assistant, Computer Science"
+academic_level: "undergrad"  # Options: faculty, postdoc, phd, undergrad
+image: "prof_pic_5.jpg"
+image_circular: false
+blurb: "Alex is a junior studying Computer Science with a focus on machine learning. He's currently working on computer vision projects and contributing to open-source ML libraries."
+socials:
+  email: "alex.martinez@student.university.edu"
+  linkedin_username: "alex-martinez-cs"
+  github_username: "amartinez-cs"

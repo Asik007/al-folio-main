@@ -1,0 +1,313 @@
+{% comment %}
+Jekyll-compatible carousel for al-folio
+Usage: {% include carousel.liquid images=page.carousel.images height="400px" autoplay=true %}
+{% endcomment %}
+
+{%- assign slide_timeout = include.timeout | default: 5 -%}
+{%- assign slide_timeout_ms = slide_timeout | times: 1000 -%}
+{%- assign carousel_index = forloop.index0 | default: 0 -%}
+{%- assign carousel_id = include.id | default: "carousel-" | append: carousel_index -%}
+{%- assign height = include.height | default: "40vh" -%}
+{%- assign autoplay = include.autoplay | default: true -%}
+{%- assign overlay_opacity = include.overlay_opacity | default: "0.3" -%}
+{%- assign overlay_color = include.overlay_color | default: "#000000" -%}
+
+<div class="carousel-container" id="{{ carousel_id }}" data-slide-timeout="{{ slide_timeout_ms }}" style="margin-bottom: 1rem;">
+  <div class="carousel-slides {% if overlay_opacity != '0' %}with-overlay{% endif %}">
+    {% if include.images %}
+      {% for image in include.images %}
+        {%- assign img_src = image.src | default: image | relative_url -%}
+        <div class="carousel-slide{% if autoplay and forloop.first %} active{% endif %}" data-index="{{ forloop.index }}" {% if autoplay and forloop.first %}style="display: block;"{% endif %}>
+          <div class="carousel-slide-image" style="background-image: url('{{ img_src }}'); height: {{ height }};">
+            {% if overlay_opacity != '0' %}
+              <div class="carousel-overlay" style="background-color: {{ overlay_color }}; opacity: {{ overlay_opacity }};"></div>
+            {% endif %}
+          </div>
+
+          {% if image.title or image.text or image.button %}
+            <div class="carousel-slide-text {{ image.position | default: 'align-center-middle' }}">
+              <div class="carousel-slide-text-inner">
+                {% if image.title %}
+                  <h1 class="carousel-heading">{{ image.title }}</h1>
+                {% endif %}
+                {% if image.text %}
+                  <p class="carousel-text">{{ image.text }}</p>
+                {% endif %}
+                {% if image.button and image.button_url %}
+                  <a href="{{ image.button_url }}" class="carousel-button">
+                    <button class="btn btn-primary">{{ image.button }}</button>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if include.images.size > 1 %}
+            <div class="carousel-slide-progress">
+              <span class="carousel-slide-progress-bar"></span>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if include.images.size > 1 %}
+      <div class="carousel-controls">
+        <button class="carousel-prev" onclick="changeSlide('{{ carousel_id }}', -1)">‹</button>
+        <button class="carousel-next" onclick="changeSlide('{{ carousel_id }}', 1)">›</button>
+      </div>
+
+      <div class="carousel-dots">
+        {% for image in include.images %}
+          <button class="carousel-dot {% if forloop.first %}active{% endif %}" onclick="currentSlide('{{ carousel_id }}', {{ forloop.index }})"></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  #{{ carousel_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  #{{ carousel_id }} .carousel-slides {
+    position: relative;
+    width: 100%;
+  }
+
+  #{{ carousel_id }} .carousel-slide {
+    display: none;
+    position: relative;
+    width: 100%;
+  }
+
+  #{{ carousel_id }} .carousel-slide:first-child {
+    display: block;
+  }
+
+  #{{ carousel_id }} .carousel-slide-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  #{{ carousel_id }} .carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  #{{ carousel_id }} .carousel-slide-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    color: white;
+    text-align: center;
+    z-index: 2;
+  }
+
+  #{{ carousel_id }} .align-center-middle {
+    align-items: center;
+    justify-content: center;
+  }
+
+  #{{ carousel_id }} .align-center-top {
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
+  }
+
+  #{{ carousel_id }} .align-center-bottom {
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 2rem;
+  }
+
+  #{{ carousel_id }} .carousel-slide-text-inner {
+    max-width: 600px;
+    padding: 1rem;
+  }
+
+  #{{ carousel_id }} .carousel-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+
+  #{{ carousel_id }} .carousel-text {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+
+  #{{ carousel_id }} .carousel-button .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    text-shadow: none;
+  }
+
+  #{{ carousel_id }} .carousel-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transform: translateY(-50%);
+    z-index: 3;
+  }
+
+  #{{ carousel_id }} .carousel-prev,
+  #{{ carousel_id }} .carousel-next {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  #{{ carousel_id }} .carousel-prev:hover,
+  #{{ carousel_id }} .carousel-next:hover {
+    background: rgba(255,255,255,0.4);
+  }
+
+  #{{ carousel_id }} .carousel-dots {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 3;
+  }
+
+  #{{ carousel_id }} .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  #{{ carousel_id }} .carousel-dot.active,
+  #{{ carousel_id }} .carousel-dot:hover {
+    background: white;
+  }
+
+  #{{ carousel_id }} .carousel-slide-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    z-index: 3;
+  }
+
+  #{{ carousel_id }} .carousel-slide-progress-bar {
+    height: 100%;
+    background: white;
+    width: 0;
+    transition: width {{ slide_timeout }}s linear;
+  }
+
+  {% if autoplay %}
+  #{{ carousel_id }} .carousel-slide.active .carousel-slide-progress-bar {
+    width: 100%;
+  }
+  {% endif %}
+
+  @media (max-width: 768px) {
+    #{{ carousel_id }} .carousel-heading {
+      font-size: 1.8rem;
+    }
+
+    #{{ carousel_id }} .carousel-text {
+      font-size: 1rem;
+    }
+
+    #{{ carousel_id }} .carousel-controls {
+      padding: 0 0.5rem;
+    }
+
+    #{{ carousel_id }} .carousel-prev,
+    #{{ carousel_id }} .carousel-next {
+      font-size: 1.5rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+</style>
+
+{% if autoplay and include.images.size > 1 %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.getElementById('{{ carousel_id }}');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.style.display = i === index ? 'block' : 'none';
+        slide.classList.toggle('active', i === index);
+        if (dots.length) {
+          dots[i].classList.toggle('active', i === index);
+        }
+      });
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      showSlide(currentIndex);
+    }
+
+    setInterval(nextSlide, {{ slide_timeout_ms }});
+  });
+</script>
+{% endif %}
+
+<script>
+  function changeSlide(carouselId, direction) {
+    const carousel = document.getElementById(carouselId);
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    let current = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+
+    current = (current + direction + slides.length) % slides.length;
+
+    slides.forEach((slide, i) => {
+      slide.style.display = i === current ? 'block' : 'none';
+      slide.classList.toggle('active', i === current);
+      if (dots.length) dots[i].classList.toggle('active', i === current);
+    });
+  }
+
+  function currentSlide(carouselId, index) {
+    const carousel = document.getElementById(carouselId);
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+
+    slides.forEach((slide, i) => {
+      slide.style.display = i === (index - 1) ? 'block' : 'none';
+      slide.classList.toggle('active', i === (index - 1));
+      if (dots.length) dots[i].classList.toggle('active', i === (index - 1));
+    });
+  }
+</script>

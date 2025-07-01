@@ -1,0 +1,35 @@
+# Profiles configuration
+# 
+# AUTOMATIC MODE (recommended):
+# Leave profile_order commented out or empty to automatically include all profiles
+# from the _data/profiles/ directory. Profiles will be organized by academic level.
+#
+# MANUAL ORDER MODE:
+# Uncomment and specify profile_order to control the exact order of profiles
+# Add the filename (without .yml extension) of each profile in the desired order
+
+# profile_order:
+#   - john_smith
+#   - jane_doe
+#   - michael_chen
+#   - sarah_johnson
+#   - alex_martinez
+
+# Profile files are automatically loaded from _data/profiles/ directory
+# Each profile file should contain: name, credentials, academic_level, image, image_circular, blurb, and socials
+# Academic levels: faculty, postdoc, phd, undergrad
+
+# Section titles and order
+section_config:
+  faculty:
+    title: "Faculty"
+    order: 1
+  postdoc:
+    title: "Post-Doctoral Researchers"
+    order: 2
+  phd:
+    title: "PhD Students"
+    order: 3
+  undergrad:
+    title: "Undergraduate Researchers"
+    order: 4

@@ -1,0 +1,13 @@
+name: "Prof. Jane Doe"
+credentials: "Professor of Bioengineering, Stanford University"
+academic_level: "faculty"  # Options: faculty, postdoc, phd, undergrad
+image: "prof_pic_2.jpg"
+image_circular: false
+blurb: "Professor Doe specializes in biomedical microsystems and has published over 100 papers in top-tier journals. Her work focuses on developing microfluidic devices for personalized medicine."
+socials:
+  email: "jane.doe@stanford.edu"
+  scholar_userid: "DEF456GHI"
+  linkedin_username: "prof-jane-doe"
+  github_username: "jdoe-bioeng"
+  orcid_id: "0000-0000-0000-0002"
+  x_username: "ProfJaneDoe"

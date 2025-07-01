@@ -1,0 +1,206 @@
+---
+layout: page
+---
+<div class="post">
+  <article>
+    {% comment %}
+    Organize profiles by academic level sections
+    {% endcomment %}
+    
+    {% comment %} Collect all profiles {% endcomment %}
+    {% assign all_profiles = '' | split: '' %}
+    
+    {% if site.data.profiles.profile_order %}
+      {% comment %} Use the specified order from profiles.yml {% endcomment %}
+      {% assign all_profiles = site.data.profiles.profile_order %}
+    {% else %}
+      {% comment %} Automatically collect all profile files {% endcomment %}
+      {% for profile_data in site.data.profiles %}
+        {% assign profile_key = profile_data[0] %}
+        {% unless profile_key == 'profile_order' or profile_key == 'section_config' %}
+          {% assign all_profiles = all_profiles | push: profile_key %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+    
+    {% comment %} Group profiles by academic level {% endcomment %}
+    {% assign faculty_profiles = '' | split: '' %}
+    {% assign postdoc_profiles = '' | split: '' %}
+    {% assign phd_profiles = '' | split: '' %}
+    {% assign undergrad_profiles = '' | split: '' %}
+    {% assign other_profiles = '' | split: '' %}
+    
+    {% for profile_file in all_profiles %}
+      {% assign profile = site.data.profiles[profile_file] %}
+      {% if profile.name %}
+        {% case profile.academic_level %}
+          {% when 'faculty' %}
+            {% assign faculty_profiles = faculty_profiles | push: profile_file %}
+          {% when 'postdoc' %}
+            {% assign postdoc_profiles = postdoc_profiles | push: profile_file %}
+          {% when 'phd' %}
+            {% assign phd_profiles = phd_profiles | push: profile_file %}
+          {% when 'undergrad' %}
+            {% assign undergrad_profiles = undergrad_profiles | push: profile_file %}
+          {% else %}
+            {% assign other_profiles = other_profiles | push: profile_file %}
+        {% endcase %}
+      {% endif %}
+    {% endfor %}
+
+    {% comment %} Define the sections to display {% endcomment %}
+    {% assign sections = 'faculty,postdoc,phd,undergrad' | split: ',' %}
+    
+    {% for section in sections %}
+      {% case section %}
+        {% when 'faculty' %}
+          {% assign section_profiles = faculty_profiles %}
+          {% assign section_title = site.data.profiles.section_config.faculty.title | default: "Faculty" %}
+        {% when 'postdoc' %}
+          {% assign section_profiles = postdoc_profiles %}
+          {% assign section_title = site.data.profiles.section_config.postdoc.title | default: "Post-Doctoral Researchers" %}
+        {% when 'phd' %}
+          {% assign section_profiles = phd_profiles %}
+          {% assign section_title = site.data.profiles.section_config.phd.title | default: "PhD Students" %}
+        {% when 'undergrad' %}
+          {% assign section_profiles = undergrad_profiles %}
+          {% assign section_title = site.data.profiles.section_config.undergrad.title | default: "Undergraduate Researchers" %}
+      {% endcase %}
+
+      {% if section_profiles.size > 0 %}
+        <div class="profile-section">
+          <h2 class="section-title">{{ section_title }}</h2>
+          <hr class="section-divider">
+          
+          {% for profile_file in section_profiles %}
+            {% assign profile = site.data.profiles[profile_file] %}
+            <div class="profile-entry">
+              {% assign is_left = forloop.index0 | modulo: 2 | equals: 0 %}
+              <div class="profile float-{% if is_left %}left{% else %}right{% endif %}">
+                {% if profile.image %}
+                  {% assign profile_image_path = profile.image | prepend: 'assets/img/' %}
+                  {% if profile.image_circular %}
+                    {% assign profile_image_class = 'img-fluid z-depth-1 rounded-circle' %}
+                  {% else %}
+                    {% assign profile_image_class = 'img-fluid z-depth-1 rounded' %}
+                  {% endif %}
+                  {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px) 30vw, 95vw"{% endcapture %}
+                  {% include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=profile.name %}
+                {% endif %}
+              </div>
+
+              <div class="clearfix">
+                <div class="profile-content">
+                  <h3>{{ profile.name }}</h3>
+                  {% if profile.credentials %}
+                    <p class="credentials"><em>{{ profile.credentials }}</em></p>
+                  {% endif %}
+                  {% if profile.blurb %}
+                    <p class="blurb">{{ profile.blurb }}</p>
+                  {% endif %}
+                  
+                  {% if profile.socials %}
+                    <div class="social-links">
+                      {% for social in profile.socials %}
+                        {% assign social_key = social[0] %}
+                        {% assign social_value = social[1] %}
+                        
+                        {% if social_key == 'email' %}
+                          <a href="mailto:{{ social_value }}" title="Email"><i class="fas fa-envelope"></i></a>
+                        {% elsif social_key == 'scholar_userid' %}
+                          <a href="https://scholar.google.com/citations?user={{ social_value }}" title="Google Scholar"><i class="ai ai-google-scholar"></i></a>
+                        {% elsif social_key == 'linkedin_username' %}
+                          <a href="https://www.linkedin.com/in/{{ social_value }}" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        {% elsif social_key == 'github_username' %}
+                          <a href="https://github.com/{{ social_value }}" title="GitHub"><i class="fab fa-github"></i></a>
+                        {% elsif social_key == 'orcid_id' %}
+                          <a href="https://orcid.org/{{ social_value }}" title="ORCID"><i class="ai ai-orcid"></i></a>
+                        {% elsif social_key == 'research_gate_profile' %}
+                          <a href="https://www.researchgate.net/profile/{{ social_value }}" title="ResearchGate"><i class="ai ai-researchgate"></i></a>
+                        {% elsif social_key == 'x_username' %}
+                          <a href="https://x.com/{{ social_value }}" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                        {% elsif social_key == 'medium_username' %}
+                          <a href="https://medium.com/@{{ social_value }}" title="Medium"><i class="fab fa-medium"></i></a>
+                        {% elsif social_key == 'kaggle_id' %}
+                          <a href="https://www.kaggle.com/{{ social_value }}" title="Kaggle"><i class="fab fa-kaggle"></i></a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% comment %} Handle profiles without academic_level (backward compatibility) {% endcomment %}
+    {% if other_profiles.size > 0 %}
+      <div class="profile-section">
+        <h2 class="section-title">Other Members</h2>
+        <hr class="section-divider">
+        
+        {% for profile_file in other_profiles %}
+          {% assign profile = site.data.profiles[profile_file] %}
+          <div class="profile-entry">
+            {% assign is_left = forloop.index0 | modulo: 2 | equals: 0 %}
+            <div class="profile float-{% if is_left %}left{% else %}right{% endif %}">
+              {% if profile.image %}
+                {% assign profile_image_path = profile.image | prepend: 'assets/img/' %}
+                {% if profile.image_circular %}
+                  {% assign profile_image_class = 'img-fluid z-depth-1 rounded-circle' %}
+                {% else %}
+                  {% assign profile_image_class = 'img-fluid z-depth-1 rounded' %}
+                {% endif %}
+                {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px) 30vw, 95vw"{% endcapture %}
+                {% include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=profile.name %}
+              {% endif %}
+            </div>
+
+            <div class="clearfix">
+              <div class="profile-content">
+                <h3>{{ profile.name }}</h3>
+                {% if profile.credentials %}
+                  <p class="credentials"><em>{{ profile.credentials }}</em></p>
+                {% endif %}
+                {% if profile.blurb %}
+                  <p class="blurb">{{ profile.blurb }}</p>
+                {% endif %}
+                
+                {% if profile.socials %}
+                  <div class="social-links">
+                    {% for social in profile.socials %}
+                      {% assign social_key = social[0] %}
+                      {% assign social_value = social[1] %}
+                      
+                      {% if social_key == 'email' %}
+                        <a href="mailto:{{ social_value }}" title="Email"><i class="fas fa-envelope"></i></a>
+                      {% elsif social_key == 'scholar_userid' %}
+                        <a href="https://scholar.google.com/citations?user={{ social_value }}" title="Google Scholar"><i class="ai ai-google-scholar"></i></a>
+                      {% elsif social_key == 'linkedin_username' %}
+                        <a href="https://www.linkedin.com/in/{{ social_value }}" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                      {% elsif social_key == 'github_username' %}
+                        <a href="https://github.com/{{ social_value }}" title="GitHub"><i class="fab fa-github"></i></a>
+                      {% elsif social_key == 'orcid_id' %}
+                        <a href="https://orcid.org/{{ social_value }}" title="ORCID"><i class="ai ai-orcid"></i></a>
+                      {% elsif social_key == 'research_gate_profile' %}
+                        <a href="https://www.researchgate.net/profile/{{ social_value }}" title="ResearchGate"><i class="ai ai-researchgate"></i></a>
+                      {% elsif social_key == 'x_username' %}
+                        <a href="https://x.com/{{ social_value }}" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                      {% elsif social_key == 'medium_username' %}
+                        <a href="https://medium.com/@{{ social_value }}" title="Medium"><i class="fab fa-medium"></i></a>
+                      {% elsif social_key == 'kaggle_id' %}
+                        <a href="https://www.kaggle.com/{{ social_value }}" title="Kaggle"><i class="fab fa-kaggle"></i></a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </article>
+</div>

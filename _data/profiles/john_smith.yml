@@ -1,0 +1,13 @@
+name: "Dr. John Smith"
+credentials: "Ph.D. in Computer Science, MIT"
+academic_level: "faculty"  # Options: faculty, postdoc, phd, undergrad
+image: "prof_pic_1.jpg"  # path relative to assets/img/
+image_circular: true
+blurb: "Dr. Smith is a leading researcher in artificial intelligence and machine learning, with over 15 years of experience in developing innovative AI solutions for healthcare applications."
+socials:
+  email: "john.smith@university.edu"
+  scholar_userid: "ABC123XYZ"
+  linkedin_username: "johnsmith-phd"
+  github_username: "jsmith-ai"
+  orcid_id: "0000-0000-0000-0001"
+  research_gate_profile: "John-Smith-Research"
