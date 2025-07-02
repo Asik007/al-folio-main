@@ -28,24 +28,24 @@ impressum_path: # set to path to include impressum link in the footer, use the s
 back_to_top: true # set to false to disable the back to top button
 
 
-plugins:
-  # - jekyll-archives-v2 # REMOVED - No collections
-  - jekyll-email-protect
-  - jekyll-feed
-  - jekyll-imagemagick
-  # - jekyll-jupyter-notebook # REMOVED - Jupyter notebook support disabled
-  - jekyll-link-attributes
-  - jekyll-minifier
-  # - jekyll-paginate-v2 # REMOVED - No blog/collections
-  - jekyll-regex-replace
-  # - jekyll/scholar # REMOVED - No publications
-  - jekyll-sitemap
-  # - jekyll-tabs # REMOVED
-  - jekyll-terser
-  # - jekyll-toc # REMOVED
-  # - jekyll-twitter-plugin # REMOVED
-  # - jemoji # REMOVED will be used# -----------------------------------------------------------------------------
-  # - jekyll-get-jso# enable_masonry: true # enables automatic project cards arrangement - REMOVED
+# plugins:
+#   # - jekyll-archives-v2 # REMOVED - No collections
+#   - jekyll-email-protect
+#   - jekyll-feed
+#   - jekyll-imagemagick
+#   # - jekyll-jupyter-notebook # REMOVED - Jupyter notebook support disabled
+#   - jekyll-link-attributes
+#   - jekyll-minifier
+#   # - jekyll-paginate-v2 # REMOVED - No blog/collections
+#   - jekyll-regex-replace
+#   # - jekyll/scholar # REMOVED - No publications
+#   - jekyll-sitemap
+#   # - jekyll-tabs # REMOVED
+#   - jekyll-terser
+#   # - jekyll-toc # REMOVED
+#   # - jekyll-twitter-plugin # REMOVED
+#   # - jemoji # REMOVED will be used# -----------------------------------------------------------------------------
+#   # - jekyll-get-jso# enable_masonry: true # enables automatic project cards arrangement - REMOVED
 # enable_math: true # enables math typesetting (uses MathJax) - REMOVED
 enable_tooltips: false # enables automatic tooltip links generated for each section titles on pages and posts
 enable_darkmode: true # enables switching between light/dark modes
@@ -237,24 +237,24 @@ keep_files:
   - .nojekyll
 
 # Plug-ins
-# plugins:
-#   - jekyll-archives-v2
-#   - jekyll-email-protect
-#   - jekyll-feed
-#   - jekyll-get-json
-#   - jekyll-imagemagick
-#   # - jekyll-jupyter-notebook # REMOVED - Jupyter notebook support disabled
-#   - jekyll-link-attributes
-#   - jekyll-minifier
-#   - jekyll-paginate-v2
-#   - jekyll-regex-replace
-#   - jekyll/scholar
-#   - jekyll-sitemap
-#   - jekyll-tabs
-#   - jekyll-terser
-#   - jekyll-toc
-#   - jekyll-twitter-plugin
-#   - jemoji
+plugins:
+  - jekyll-archives-v2
+  - jekyll-email-protect
+  - jekyll-feed
+  - jekyll-get-json
+  - jekyll-imagemagick
+  # - jekyll-jupyter-notebook # REMOVED - Jupyter notebook support disabled
+  - jekyll-link-attributes
+  - jekyll-minifier
+  - jekyll-paginate-v2
+  - jekyll-regex-replace
+  - jekyll/scholar
+  - jekyll-sitemap
+  - jekyll-tabs
+  - jekyll-terser
+  - jekyll-toc
+  - jekyll-twitter-plugin
+  - jemoji
 
 # Sitemap settings
 defaults:
