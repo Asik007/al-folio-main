@@ -28,9 +28,9 @@ profile:
     <div>
       <strong>Lab Address:</strong><br>
       E-603 MSB<br>
-      851 S Morgan St.<br>
+      835 S Wolcott St.<br>
       Chicago, IL 60607<br>
-      <a href="https://maps.google.com/?q=851+S+Morgan+St,+Chicago,+IL+60607" target="_blank">Google Maps</a>
+      <a href="https://maps.google.com/?q=835+S+Wolcott+St,+Chicago,+IL+60607" target="_blank">Google Maps</a>
     </div>
     </div>
     </div>

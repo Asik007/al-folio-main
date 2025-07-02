@@ -1,7 +1,7 @@
 name: "Dr. Michael Chen"
 credentials: "Research Scientist, Google DeepMind"
 academic_level: "postdoc"  # Options: faculty, postdoc, phd, undergrad
-image: "prof_pic_3.jpg"
+image: "prof_pic.jpg"
 image_circular: true
 blurb: "Dr. Chen is a research scientist focusing on deep learning architectures and their applications in natural language processing. He has contributed to several breakthrough models in the field."
 socials:
