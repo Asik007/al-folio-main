@@ -32,7 +32,7 @@ plugins:
   # - jekyll-archives-v2 # REMOVED - No collections
   - jekyll-email-protect
   - jekyll-feed
-    - jekyll-imagemagick
+  - jekyll-imagemagick
   # - jekyll-jupyter-notebook # REMOVED - Jupyter notebook support disabled
   - jekyll-link-attributes
   - jekyll-minifier
